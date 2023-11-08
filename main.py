@@ -76,3 +76,68 @@ from modulo.credenciales_usuario import PASS , USERNAME
 
 
 #EJERCICIO °1   #min 54
+
+import sqlite3
+nombre_base_datos = 'libreria_23508.db'
+
+conn = sqlite3.connect(nombre_base_datos)
+cursor = conn.cursor()
+
+ddl_query_table = f"""
+CREATE TABLE IF NOT EXISTS USER (
+id_user INTEGER PRIMARY KEY AUTOINCREMENT,
+username VARCHAR,
+password VARCHAR
+)
+""" 
+
+cursor.execute(ddl_query_table)
+
+flag:bool = True
+chars_de_negacion = ['n', 'N', 'no', 'No', 'NO']
+
+while flag:
+
+    print("agregar usuario")
+    user = input('ingrese el nombre del usuario:\t ')
+    password = input('ingrese su contraseña:\t ')
+
+    insert_query = f"""
+
+    INSERT INTO USER
+    (username, password)
+    VALUES
+    ('{user}','{password}');
+    """
+
+    cursor.execute(insert_query)
+
+
+    user_stopper = input("desea agregar otro usuario?\t")
+
+    if user_stopper in chars_de_negacion:
+        flag = not flag
+        print("Ya no se cargaran usuarios")
+    else:
+        print("Carga el siguiente usuario")
+    
+
+else: 
+    conn.commit()
+    print("Se commitiaron los cambios")
+    conn.close()
+    print("Se cierra la base de datos")
+
+
+##EJERCICIO ° 2 AÑO BISIESTO
+
+fecha_tope = int(input("fecha de tope:\t"))
+
+for year in range(1940, fecha_tope):
+    primera_condicion:bool = (year%400 == 0)
+    segunda_condicion:bool = ((year%4 == 0) and (year%100 != 0))
+
+    if primera_condicion or segunda_condicion:
+        print(f'El año {year:~^10} es bisiesto😉')
+    
+
